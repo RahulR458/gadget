@@ -1,0 +1,189 @@
+<%- include('../includes/header.ejs') %>
+
+        <main class="main">
+        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title">My Order<span>Status</span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My Order Status</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+           
+								    <div class="col-md-8 col-lg-9" style="margin-left: 12.5%;">
+                                        <div class="tab-content">
+								    	<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+											<p>Orders</p>
+											<thead>
+												<tr>
+													<th>Product</th>
+													<th>Image</th>
+													<th>Quantity</th>
+													<!-- <th>Price</th> -->
+													<th>Total</th>
+													<th>Return</th>
+													<th>Cancell</th>
+												</tr>
+											</thead>
+										
+											<tbody>
+
+								
+                                                    
+            
+                                                    
+                                                        
+
+                                                    <% for(var j=0 ;j<orders.products.item.length ;j++) {%>
+                                                      
+                                                      <% for(var k=0;k<product.length;k++) {%>
+
+                                                    <% if(product[k]._id.toString()  ==  orders.products.item[j].productId.toString()){ %> 
+                                                        <tr>
+                                                            <td><%= product[k].productName %></td>
+                                                        
+                                                            <td><img src="/user/images/<%= product[k].image %>" alt="" style="width: 50px; height: 50px;" ></td>
+                                                            <td>
+                                                                <%= orders.products.item[j].qty %>
+                                                            </td>
+                                                            <% if(j==0){ %>
+                                                                <td> <%= orders.products.totalPrice %></td>
+                                                                <% }%>
+
+                                                                <% if(j==0){ %>
+                                                                <td>
+                                                                    <div style="display: flex;">
+                                                                        <% if(ret==true) { %>
+                                                                        <input type="hidden" value="<%= orders._id %>" id="idvalue">
+                                                                            <div>
+                                                                                <a href="#"><span style="padding: 10px;
+                                                                                    display: inline;
+                                                                                    border-radius: 4px;
+                                                                                    border: 0;
+                                                                                    margin: 0 10px;
+                                                                                    background: rgb(94, 255, 0);
+                                                                                    font-size: 15px;
+                                                                                    line-height: 15px;
+                                                                                    color: white;
+                                                                                    width: auto;
+                                                                                    height: auto;
+                                                                                    box-sizing: content-box;"
+                                                                                    onclick="reason()">Return</span></a>
+                                                                            </div>
+                                                                        <%}%>
+                                                                        
+                                                                        <select name="" id="returnSelect">
+                                                                            <option value="">Select Reason</option>
+                                                                            <option value="product damage">product damage</option>
+                                                                            <option value="Dont't like color">Dont't like color</option>
+                                                                            <option value="Alredy bought">Alredy bought</option>
+                                                                            <option value="Order delayed">Order delayed</option>
+                                                                        </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <% }%>
+
+                                                                <% if(j==0){ %>
+                                                                    <td>
+                                                                        <div style="display: flex;">
+                                                                            
+                                                                            <% if(cancel==true) { %>
+                                                                                <div>
+                                                                                    <a href="#"><span style="padding: 10px;
+                                                                                        display: inline;
+                                                                                        border-radius: 4px;
+                                                                                        border: 0;
+                                                                                        margin: 0 10px;
+                                                                                        background: rgb(255, 0, 0);
+                                                                                        font-size: 15px;
+                                                                                        line-height: 15px;
+                                                                                        color: white;
+                                                                                        width: auto;
+                                                                                        height: auto;
+                                                                                        box-sizing: content-box;"
+                                                                                        onclick="">Cancell</span></a>
+                                                                                </div>
+                                                                                <%}%>
+                                                                            
+                                                                           
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                <% }%>
+                                                            
+                                                        </tr> 
+
+
+                                                        
+                                                               
+
+
+                                                    <!-- <td><%= orders.price %></td> -->
+                                                    
+                                                   
+
+                                                    <%}%>
+                                                    <%}%>
+                                                    <%}%>
+                                                    <!-- <td><%= orders.fullname %></td>
+                                                    <td><%= orders.fullname %></td> -->
+                                                   
+                                              
+                                               
+									
+															 
+									
+															
+									
+									
+
+													
+											</tbody>
+                                        
+										</table>
+                                        
+                                        </div>
+                                    </div>
+
+								    
+								
+           
+        </main><!-- End .main -->
+
+	<script>
+        let returnSelect = document.getElementById("returnSelect")
+		returnSelect.style.display = "none";
+		let idvalue = document.getElementById("idvalue").value
+
+		function reason(){
+			returnSelect.style.display = "block"
+		}
+		returnSelect.addEventListener("change",(event)=>{
+			// console.log(event.target.value)
+			// console.log(idvalue)
+			fetch('/return/reason', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ value: event.target.value,id:idvalue })
+            })
+            .then(response => {
+                console.log('PUT request sent');
+            })
+            .catch(error => {
+                console.error('Error sending PUT request:', error);
+        });
+			
+		})
+    </script>
+
+<%- include('../includes/footer.ejs') %>

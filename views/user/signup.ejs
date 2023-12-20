@@ -1,0 +1,134 @@
+<%- include('../includes/userLoginRegHeader.ejs') %>
+
+        <div class="container">
+          <div id="toast"></div>
+          <div class="cover">
+            <div class="front">
+              <img src="/user/userLogin/images/frontImg.png" alt="">
+            </div>
+            <div class="back">
+             
+              <div class="text">
+                <span class="text-1">Complete miles of journey <br> with one step</span>
+                <span class="text-2">Let's get started</span>
+              </div>
+            </div>
+          </div>
+          <div class="forms">
+            <div class="form-content">
+              <div class="login-form">
+                    <div class="title">Signup</div>
+                    <form  onsubmit="return false"  id="add_user">
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                <input type="text" placeholder="Enter your name" name="name" id="validate_name"
+                                    onkeyup="validateName()">
+                            </div>
+                            <span id="name_error"></span>
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                <input type="text" placeholder="Enter your email" name="email" id="validate_email"
+                                    onkeyup="validateEmail()">
+                            </div>
+                            <span id="email_error"></span>
+                            <div class="input-box">
+                                <i class="fas fa-phone"></i>
+                                <input type="number" placeholder="Enter your Mobile number" name="number"
+                                    id="validate_number" onkeyup="validateNumber()">
+                            </div>
+                            <span id="number_error"></span>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" placeholder="Enter your password" name="password"
+                                    id="validate_password" onkeyup="validatePassword()">
+                            </div>
+                            <span id="password_error"></span>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" placeholder="Confirm password" id="validate_confirm_p"
+                                    onkeyup="validateConfirmPassword()">
+                            </div>
+                            <span id="confirmP_error"></span>
+                            <div class="button input-box">
+                                <input type="submit" value="Submit" id="validate_submit"
+                                    onclick="validateSubmit(),creatUser()">
+                            </div>
+                            <span id="submit_error"></span>
+                            <div class="text sign-up-text">Already have an account? <label><a href="/login" >Login now</a></label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/assets/validation.js"></script>
+    <script src="/assets/index.js"></script> -->
+
+    <script>
+
+      function creatUser() {
+
+        let nameVal = document.getElementById("validate_name").value
+        let emailVal = document.getElementById("validate_email").value
+        let numberVal = document.getElementById("validate_number").value
+        let passwordVal = document.getElementById("validate_password").value
+        console.log(nameVal, emailVal, numberVal, passwordVal)
+
+        fetch("/api/user", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any other headers here if needed
+          },
+          body: JSON.stringify({ name: nameVal, email: emailVal, number: numberVal, password: passwordVal }),
+        })
+          .then((response) => {
+
+            console.log("zero")
+            const result = response.json();
+            console.log(result);
+            return result;
+          })
+          .then((data) => {
+            window.location.href = '/login';
+
+            console.log("first")
+            showToast("Registration successful")
+
+          })
+          .catch((err) => console.log(err));
+
+      }
+
+      
+      function showToast(message) {
+        console.log("second")
+        // Create a new div element for the toast
+        var toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.textContent = message;
+
+        // Append the toast to the body
+        document.body.appendChild(toast);
+
+        // Show the toast
+        toast.style.display = 'block';
+
+        // Hide the toast after a delay (e.g., 3 seconds)
+        setTimeout(function () {
+          toast.style.display = 'none';
+
+        }, 5000);
+      }
+    </script>
+
+    <%- include('../includes/userLoginRegFooter.ejs') %>

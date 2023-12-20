@@ -1,0 +1,479 @@
+<%- include('../includes/adminHeader.ejs') %>
+
+
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <button onclick="pdfdownloard()"  <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a></button>
+                        
+                    </div>
+                    <div class="row" style="margin-bottom: 10px;margin-left: 1px;">
+                        <div class="card-deck col-md-12">
+                          <div style="margin-left: 5px;">
+                              <select name="" id="resultOption" aria-placeholder="choose" style="height: 100%;width: 150px;" onchange="resultOptions()"  >
+                                <option value="">choose</option>
+                                <option value="Yearly">Yearly</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Weekly">Custom</option>
+                              </select>
+                          </div>
+                
+                          <div style="margin-left: 5px;" id="yearOption" onchange="fetchDataYear()">
+                            <select name="" id="yearSelect"  style="height: 100%;">
+                              <option value="2020">2020</option>
+                              <option value="2021">2021</option>
+                              <option value="2022">2022</option>
+                              <option value="2023">2023</option>
+                            </select>
+                        </div>
+                
+                          <div style="margin-left: 5px;" id="monthOption" onchange="fetchDataYear()">
+                              <select name="" id="monthSelect" style="height: 100%;">
+                                <option value="">Months</option>
+                                <option value="01">January</option>
+                                <option value="02">February</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">Aujust</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                              </select>
+                          </div>
+                
+                          <!-- <a href="/admin/pdf/downloard">pdf</a> -->
+                 
+                          <div id="weekOption1" style="margin-left: 25px;">
+                            <input type="date" id="customDate" onchange="fetchDataYear()">
+                          </div>
+                
+                          <!-- <div id="weekOption2" style="margin-left: 25px;">
+                            <span>End</span>
+                            <input type="date">
+                          </div> -->
+                
+                        
+                          <button onclick="pdfdownloard()" style="margin-left: 25px;" type="button" class="btn btn-info" id="pdfbtn" >PDF</button>
+                
+                          <div style="margin-left: 10px;" id="goto">
+                            
+                          </div>
+                
+                        </div>
+                    </div>
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Orders</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <%= data[0].order %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Earnings (Monthly) Card Example -->
+                         <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Sales</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <%= data[0].sale %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Rs</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <%= data[0].rupee %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Earnings (Monthly) Card Example -->
+                         <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <%= data[0].user %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- Cancell Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-danger shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Cancell Requests</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= data[0].cancell %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Return Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Return Requests</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= data[0].return %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pending Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Orders (Today)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= data[0].order %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                          <!-- Earnings (Monthly) Card Example -->
+                          <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Profit (Total)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= data[0].profit %></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-8 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Dropdown Header:</div>
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="myAreaChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie Chart -->
+                        <div class="col-xl-4 col-lg-5">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Dropdown -->
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                                    <!-- <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Dropdown Header:</div>
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="myPieChart"></canvas>
+                                    </div>
+                                    <div class="mt-4 text-center small">
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-primary"></i> Direct
+                                        </span>
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-success"></i> Social
+                                        </span>
+                                        <span class="mr-2">
+                                            <i class="fas fa-circle text-info"></i> Referral
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row" style="margin-top: 100px;">
+                        <canvas id="myChart" style=" margin-bottom: 50px;">
+                        </canvas>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+                <script>
+                    function pdfdownloard() {
+                        fetch("/adminLogin/admin/pdf/download", {
+                            method: "post",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({}),
+                        })
+                            .then(response => response.blob())
+                            .then(blob => {
+                                // Create a download link for the PDF
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'report.pdf';
+                                a.click();
+
+                                // Clean up the URL object
+                                URL.revokeObjectURL(url);
+                            })
+                            .catch((err) => console.log(err));
+                    }
+
+                    
+                </script>
+                <script>
+                    addEventListener("DOMContentLoaded", function fetchfulldata() {
+                        const mode = 'full'
+                        const url = `adminLogin/admin/graph/data?id = ${ mode }`;
+
+                        const options = {
+                            method: 'POST',
+                            Headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ id: url })
+                        }
+                        const type = 'bar';
+                        const id = "myChart"
+                        fetchdata(url, options, type, id)
+                    });
+                </script>
+                <script>
+
+                    let monthOption = document.getElementById("monthOption");
+                    monthOption.style.display = "none";
+
+                    let yearOption = document.getElementById("yearOption");
+                    yearOption.style.display = "none";
+
+                    let weekOption1 = document.getElementById("weekOption1");
+                    weekOption1.style.display = "none";
+
+                    let pdfbtn = document.getElementById("pdfbtn");
+                    pdfbtn.style.display = "none";
+
+                    // let weekOption2 = document.getElementById("weekOption2");
+                    // weekOption2.style.display = "none";
+
+                    let goto = document.getElementById("goto");
+                    goto.style.display = "none";
+
+                    let moderes;
+                    let fetchYear;
+                    let fetchDataMonth;
+                    let fetchcustomDate;
+
+
+                    function resultOptions() {
+                        monthOption.style.display = "none";
+                        yearOption.style.display = "none";
+                        weekOption1.style.display = "none";
+                        pdfbtn.style.display = "none";
+                        // weekOption2.style.display = "none";
+                        goto.style.display = "none";
+
+                        let resultOption = document.getElementById("resultOption").value;
+                        moderes = resultOption
+                        console.log(resultOption + "resultOption")
+                        if (resultOption == "Yearly") {
+                            yearOption.style.display = "block"
+                            goto.style.display = "block"
+                        } else if (resultOption == "Monthly") {
+                            yearOption.style.display = "block"
+                            goto.style.display = "block"
+                            monthOption.style.display = "block"
+                            goto.style.display = "block"
+                        } else {
+                            weekOption1.style.display = "block"
+                            // weekOption2.style.display = "block"
+                            goto.style.display = "block"
+                        }
+                    }
+
+
+                    function fetchDataYear() {
+
+                        fetchYear = document.getElementById("yearSelect").value;
+                        fetchDataMonth = document.getElementById("monthSelect").value;
+                        fetchcustomDate = document.getElementById("customDate").value;
+                        pdfbtn.style.display = "block"
+
+                    }
+
+                    function pdfdownloard1() {
+
+                        console.log("start");
+                        console.log(fetchcustomDate)
+                        console.log("end");
+                        console.log(fetchYear + "fetchYear........")
+                        console.log(fetchDataMonth + "fetchDataMonth........");
+                        console.log(moderes, "modeee....")
+
+
+                        fetch("/admin/pdf/downloard", {
+                            method: "post",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ year: fetchYear, month: fetchDataMonth, mode: moderes, custom: fetchcustomDate }),
+                        })
+                            .then(response => response.blob())
+                            .then(blob => {
+                                // Create a download link for the PDF
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'report.pdf';
+                                a.click();
+
+                                // Clean up the URL object
+                                URL.revokeObjectURL(url);
+                            })
+                            .catch((err) => console.log(err));
+                    }
+
+                </script>
+
+            
+    <%- include('../includes/adminFooter.ejs') %>

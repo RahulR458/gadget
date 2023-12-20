@@ -1,0 +1,54 @@
+<%- include('../includes/adminHeader.ejs') %>
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                
+                    <div class="container">
+                        <h1 class="mt-5 mb-4">Add a New Coupon</h1>
+                        <form action="/api/coupon" method="post" id="add_coupon">
+                            <!-- Product Name -->
+                            <div class="form-group">
+                                <label for="couponName">Coupon Name</label>
+                                <input type="text" class="form-control" id="couponName" name="couponName" required>
+                            </div>
+                
+                            <!-- Product Description -->
+                            <div class="form-group">
+                                <label for="couponCode">Coupon Code</label>
+                                <input class="form-control" id="couponCode" name="couponCode" rows="3"
+                                    required>
+                            </div>
+                
+                            <!-- Product Price -->
+                            <div class="form-group">
+                                <label for="couponPercentage">Off Percentage</label>
+                                <input type="number" class="form-control" id="couponPercentage" name="couponPercentage" required>
+                            </div>
+                
+                            <!-- Max Off -->
+                            <div class="form-group">
+                                <label for="couponMaxOff">Max Off</label>
+                                <input type="number" class="form-control" id="couponMaxOff" name="couponMaxOff" required>
+                            </div>
+
+                            <!-- Product stock -->
+                            <div class="form-group">
+                                <label for="couponExpiry">Expiry Date</label>
+                                <input type="date" class="form-control" id="couponExpiry" name="couponExpiry" required>
+                            </div>
+                        
+                
+                            <!-- Product Image -->
+                            <div class="form-group">
+                                <label for="couponCount">Count</label>
+                                <input type="number" class="form-control" id="couponCount" name="couponCount" required>
+                            </div>
+                                            
+                            <button type="submit" class="btn btn-primary">Add Coupon</button>
+                        </form>
+                    </div>
+                
+                </div>
+                <!-- /.container-fluid -->
+
+                <%- include('../includes/adminFooter.ejs') %>
