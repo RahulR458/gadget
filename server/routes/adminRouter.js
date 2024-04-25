@@ -30,6 +30,7 @@ route.get('/editCoupon',middleware.isLogin,services.editCoupon)
 route.get('/editOffer',middleware.isLogin,services.editOffer)
 route.get('/adminErrorPage',services.adminErrorPage)
 
+
 // route.get('/update-product', services.update_product);
 
 function abc(req,res,next){
@@ -41,7 +42,8 @@ route.put('/status/change',abc,services.statusChange)
 
 route.post('/admin/pdf/downloard',abc,services.salesReport)
 route.post('/admin/pdf/download',services.customPDF)
-route.post('/admin/graph/data',services.graphData)
+route.post('/graph/data',services.graphData)
+route.post('/poduct/pagin',services.pagination)
 
 // route.post('/api/categories',categoryController.create);
 // route.get('/api/categories',categoryController.list);

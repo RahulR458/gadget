@@ -99,13 +99,15 @@
 				<div class="flex-w flex-sb-m p-b-52">
 					<div class="flex-w flex-l-m filter-tope-group m-tb-10">
 						<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" >
-							<a href="/products">All Products</a>	
+							<a href="/products">All Products</a>
+							<input type="radio" style="visibility: hidden;" id="" class="" name="" value = ""/>	
 						</button>
 
-						<% category.forEach(cat=>{ %>
+						<% category.forEach((cat,index)=>{ %>
 							<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-								data-filter="<%= cat.categoryName%>" onclick="showCategoryProd('<%= cat._id %>')">
+								data-filter="<%= cat.categoryName%>" onclick="showCategoryProd('<%= cat._id %>', '<%= cat.categoryName%>')">
 								<%= cat.categoryName%>
+									<input type="radio" style="visibility: hidden;" id="<%= cat._id %>" class="classCategory" name="categoryHidden" value = ""/>
 							</button>
 							<% }) %>
 
@@ -153,13 +155,13 @@
 
 								<ul>
 									
-									<li class="p-b-6" onclick="priceFilter(1)">
+									<li class="p-b-6" onclick="priceSort(1)">
 										<a href="#" class="filter-link stext-106 trans-04">
 											Price: Low to High
 										</a>
 									</li>
 
-									<li class="p-b-6" onclick="priceFilter(-1)">
+									<li class="p-b-6" onclick="priceSort(-1)">
 										<a href="#" class="filter-link stext-106 trans-04">
 											Price: High to Low
 										</a>
@@ -611,6 +613,8 @@
 
 
 		<script>
+			let categoryValue = null;
+			console.log(document.getElementById("655c90b7a1dba23a49b88fe3"));
 
 			function showall() {
 
@@ -633,9 +637,14 @@
 					})
 			}
 
-			function showCategoryProd(value) {
-				
-				const category = value
+			function showCategoryProd(dataId, id_category) {
+				console.log(dataId+"....data");
+				console.log(id_category+"....id_category");
+				// console.log(document.getElementsByClassName(id_category)[0]);
+				document.getElementById(dataId).value = id_category
+				// let id = document.getElementById(data)
+				console.log(document.getElementById(dataId));
+				const category = dataId
 				
 				fetch("/product/list", {
 					method: "POST",
@@ -650,7 +659,6 @@
 						display(data)
 
 					})
-
 			}
 
 			function display(data) {
@@ -722,13 +730,16 @@
 
 			}
 
-			function priceFilter(value){
-				
-				console.log(value+"mm");
+// -------------------Sort--------------------------------------------------------
+
+			function priceSort(value){
+				categoryValue = document.querySelector('input[name="categoryHidden"]:checked').id;
+				console.log(categoryValue);
+				// console.log(value+"mm");
 				fetch("/product/priceFilter", {
 					method: "POST",
 					headers: { "content-type": "application/json" },
-					body: JSON.stringify({ value: value })
+					body: JSON.stringify({ value: value, categoryValue: categoryValue })
 				})
 					.then(response => {
 						const result = response.json()

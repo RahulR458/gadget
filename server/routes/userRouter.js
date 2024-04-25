@@ -73,5 +73,6 @@ route.delete('/api/user/:id',userController.delete);
 
 
 // route.post('/api/dash',services.dash);
+// route.get('*',services.errorPage)
 
 module.exports = route

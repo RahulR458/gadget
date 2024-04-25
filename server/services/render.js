@@ -238,15 +238,15 @@ exports.logout_user = (req,res)=>{
 exports.category = async (req,res)=>{
     try{
         // axios.get('http://localhost:3000/api/categories')
-        await categoryModel.find()
-        .then(response=>{
-            res.render("category",{ category: response.data })
-            console.log("res",response.data);
-        })
-        .catch(err => {
-            console.error(err);
-            res.send(err)
-        })
+        const categoryData = await categoryModel.find()
+        // .then(response=>{
+            res.render("category",{ category: categoryData })
+            // console.log("res",response.data);
+        // })
+        // .catch(err => {
+        //     console.error(err);
+        //     res.send(err)
+        // })
     }catch(error){
         res.render('404_errorPage', { message: error.message });
     }
@@ -452,11 +452,14 @@ exports.productSearch = (req,res)=>{
 exports.priceFilter = async (req,res)=>{
     try{
         const val = req.body.value
+        const categoryValue = req.body.categoryValue
         console.log(val + "bb");
-        await productModel.find({})
-            .sort({ price: val })
+        if(categoryValue !== null){
+            productModel.find({category: categoryValue}).sort({price:  val}) 
             .then(response => {
-                console.log(response + "res....");
+                // let res = Array.isArray(response)
+                response.map(item => console.log(item.price));
+                // console.log(res + "...res....");
                 // res.json(response)
                 if (!response) {
                     res.status(404).send({ message: "Not found user with id" })
@@ -467,6 +470,24 @@ exports.priceFilter = async (req,res)=>{
             .catch(error => {
                 console.log(error)
             })
+        }else{
+            productModel.find().sort({price:  val}) 
+            .then(response => {
+                // let res = Array.isArray(response)
+                response.map(item => console.log(item.price));
+                // console.log(res + "...res....");
+                // res.json(response)
+                if (!response) {
+                    res.status(404).send({ message: "Not found user with id" })
+                } else {
+                    res.json(response)
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        }
+         
     }catch(error){
         res.render('404_errorPage', { message: error.message });
     }
@@ -652,7 +673,8 @@ exports.checkoutPost = async (req, res) => {
                     key_secret: "9T6sXx9N1YswYtmKmP39GmWO",
                 });
             
-                const amount = 50000; // Amount in paise (100 paise = 1 INR)
+                let totalPrice = total*100; 
+                const amount = totalPrice; // Amount in paise (100 paise = 1 INR)
                 const currency = "INR";
             
                 const order = await razorpay.orders.create({
@@ -817,33 +839,41 @@ exports.newPasswordPost = async (req,res)=>{
 
 exports.succesPostCheck = async (req,res)=>{
     try{
-        // let odderPost = true;
-        let abcd = 0;
+        let odderPost = true;
+        // let abcd = 0;
 
         const user = await userModel.findById({ _id: req.session.userId });
+
+        let userCartLength = (user.cart.item.length)-1
+        console.log(userCartLength,"...userCartLength");
     
         const value = user.cart.item.map(async (val, i) => {
             console.log("inside loop");
+            console.log(val);
             let prid = val.productId;
+            console.log(prid+ "..price id");
     
             const product = await productModel.findById({ _id: prid });
-    
+            console.log(product + "..product");
             let prs = product.stock;
     
             let pri = val.qty;
             console.log(prs+"..."+pri);
     
+            // if (prs - pri <= 0) {
+            //     abcd = 1;
+            // }
             if (prs - pri <= 0) {
-                abcd = 1;
+                odderPost = false;
+                res.json({ odderNext: odderPost });
+            }
+            if(userCartLength == i && odderPost !== false){
+                res.json({ odderNext: odderPost });
             }
           
         });
-        if(abcd==0){
-            res.json({abc:"ok"})
-        }else{
-            res.json({abc:"not"})
-        }
-
+        
+        
     }catch(error){
             console.log("hai");    
     }
@@ -1484,13 +1514,14 @@ exports.block_user = async (req, res) => {
 exports.user_table = async (req, res) => {
     try{
             // axios.get('http://localhost:3000/api/user')
-            await userModel.find()
-                .then(response => {
-                    res.render("tables", { users: response.data })
-                })
-                .catch(err => {
-                    res.send(err)
-                })
+            const userData = await userModel.find()
+                // .then(response => {
+                    res.render("tables", { users: userData })
+                    console.log(userData);
+                // })
+                // .catch(err => {
+                //     res.send(err)
+                // })
     }catch(error){
         res.render("404_adminErrorPage",{message:error.message})
     }
@@ -1533,6 +1564,7 @@ exports.product_table = async (req, res) => {
     try{
             try {
                 const products = await productModel.find({}).exec();
+                console.log(products);
                 res.render("product_table", { products });
             } catch (error) {
                 // res.send(err);
@@ -2027,10 +2059,10 @@ exports.customPDF = (req,res)=>{
     // const orderDates = await ordersdb.find().distinct('createdAt');
     // console.log(orderDates)
 
-    
+    console.log("graphData");
 
     if(req.query.id === "full"){
-        
+        console.log("inner if");
         const orderdata = await orderModel.find();
         console.log(orderdata);
         console.log("in fetchSales",orderdata);
@@ -2050,6 +2082,36 @@ exports.customPDF = (req,res)=>{
         res.json(chartdata);
     }
 };
+
+exports.pagination = async (req,res)=>{
+    let { nextValue, innerValue } = req.body;
+    const data = await productModel.find();
+
+    let datalength = data.length;
+    let lengthRes = Math.ceil(datalength / 2);
+
+    let nextpage = innerValue;
+                    let lenghtStart;
+                    let lenghtEnd;
+                    if (nextValue == -1) {
+                        if (innerValue > 1) {
+                            nextpage = --innerValue;
+                        }
+                        lenghtStart = innerValue * 2 - 2;
+                        lenghtEnd = lenghtStart + 2;
+                        console.log(lenghtStart, lenghtEnd);
+                    } else {
+                        if (innerValue < lengthRes) {
+                            nextpage = ++innerValue;
+                        }
+                        lenghtStart = innerValue * 2 - 2;
+                        lenghtEnd = lenghtStart + 2;
+                        console.log(lenghtStart, lenghtEnd);
+                    }
+                    let result = data.filter((val, index) => index >= lenghtStart && index < lenghtEnd);
+                    result.push(nextpage);
+                    res.json(result);
+}
 
 
 // exports.dash = (req,res)=>{

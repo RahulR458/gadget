@@ -14,12 +14,16 @@ const isLogin = async (req, res, next) => {
 };
 
 const isLogout = async (req, res, next) => {
+  console.log("logout start");
   try {
     if (req.session.userId) {
+      console.log("11");
       res.redirect('/adminLogin/dashboard');
     }
+    console.log("22");
     next();
   } catch (error) {
+    console.log("error");
     res.render('404_adminErrorPage', { message: error.message });
 
   }

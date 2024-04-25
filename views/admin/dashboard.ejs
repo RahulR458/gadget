@@ -328,13 +328,14 @@
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row" style="margin-top: 100px;">
-                        <canvas id="myChart" style=" margin-bottom: 50px;">
-                        </canvas>
-                    </div>
+                    
 
                 </div>
                 <!-- /.container-fluid -->
+                <div class="row" style="margin-top: 10px; padding-right: 470px; padding-left: 30px;">
+                    <canvas id="myChart" style=" margin-bottom: 50px;">
+                    </canvas>
+                </div>
 
                 <script>
                     function pdfdownloard() {
@@ -363,9 +364,10 @@
                     
                 </script>
                 <script>
-                    addEventListener("DOMContentLoaded", function fetchfulldata() {
+                     addEventListener("DOMContentLoaded",function fetchfulldata(){
+  
                         const mode = 'full'
-                        const url = `adminLogin/admin/graph/data?id = ${ mode }`;
+                        const url = `/adminLogin/graph/data?id=${mode}`;
 
                         const options = {
                             method: 'POST',
@@ -373,11 +375,55 @@
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({ id: url })
-                        }
-                        const type = 'bar';
-                        const id = "myChart"
-                        fetchdata(url, options, type, id)
-                    });
+                            }
+                            const type = 'bar';
+                            const id = "myChart"
+                            fetchdata(url, options, type, id)
+                        });
+
+                        function chartBar(data, type, id){
+                                // Get a reference to the canvas element
+                                const ctx = document.getElementById(id).getContext('2d');
+
+                                // Set up your data for the chart
+                                const labels = data.map(item => item.label); // Assuming each data object has a 'label' property
+                                const values = data.map(item => item.value); // Assuming each data object has a 'value' property
+                                console.log("values", values);
+                                // Create the chart
+                                new Chart(ctx, {
+                                    type: type, // Specify the type of chart you want (bar, line, pie, etc.)
+                                    data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'My Data',
+                                        data: values,
+                                        backgroundColor: 'rgba(0, 123, 255, 0.5)' // Set a color for the bars
+                                    }]
+                                    },
+                                    options: {
+                                    // Configure additional options as needed
+                                    scales: {
+                                    y: {
+                                    beginAtZero: true
+                                    }
+                                }
+                                  }
+                                  });
+
+                            }
+
+                        function fetchdata(url, options, type, id){
+
+                            fetch(url, options)
+                            .then(response => response.json())
+                            .then(data => {
+                            // console.log(data,"data..................");
+                            chartBar(data, type, id)
+                            // chartLine(myData, 'line', 'myChart2');
+
+
+                                })
+                            }
                 </script>
                 <script>
 
@@ -472,6 +518,9 @@
                             })
                             .catch((err) => console.log(err));
                     }
+
+
+                   
 
                 </script>
 

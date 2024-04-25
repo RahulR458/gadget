@@ -1,0 +1,10 @@
+#toast {
+    display: none;
+    position: fixed;
+    top: 80px;
+    right: 10px;
+    background-color: #09f50d;
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+}
